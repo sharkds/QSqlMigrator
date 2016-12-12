@@ -6,6 +6,7 @@
 #include "Structure/Table.h"
 #include "Structure/Index.h"
 #include "Structure/Trigger.h"
+#include "Structure/Procedure.h"
 
 #include <QMap>
 #include <QSharedPointer>
@@ -48,19 +49,33 @@ public:
         Trigger& operator =(const Trigger& other);
     };
 
+    /*!
+     * \brief internal Assignable version of Procedure
+     */
+    class Procedure : public Structure::Procedure
+    {
+    public:
+        Procedure(const Procedure& other);
+        Procedure(const Structure::Procedure& other);
+        Procedure& operator =(const Procedure& other);
+    };
+
     typedef QMap<QString, Table> TableMap;
     typedef QMap<QString, Index> IndexMap;
     typedef QMap<QString, Trigger> TriggerMap;
+    typedef QMap<QString, Procedure> ProcedureMap;
 
     LocalScheme();
 
     TableMap &tables();
     IndexMap &indices();
     TriggerMap &triggers();
+    ProcedureMap &procedures();
 
     const Structure::Table* table(const QString& name) const;
     const Structure::Index* index(const QString& name) const;
     const Structure::Trigger* trigger(const QString& name) const;
+    const Structure::Procedure* procedure(const QString& name) const;
 
     void createTable(const Structure::Table& table);
     void alterTable(const Structure::Table& table);
@@ -73,10 +88,14 @@ public:
     void createTrigger(const Structure::Trigger &trigger);
     void dropTrigger(const QString& triggerName);
 
+    void createProcedure(const Structure::Procedure &procedure);
+    void dropProcedure(const QString& procedureName);
+
 private:
     TableMap m_tables;
     IndexMap m_indices;
     TriggerMap m_triggers;
+    ProcedureMap m_procedures;
 };
 
 } // namespace Structure

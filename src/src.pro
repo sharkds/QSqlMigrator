@@ -69,7 +69,14 @@ SOURCES += \
     BaseSqlMigrator/CommandExecution/BaseSqlCreateTriggerService.cpp \
     BaseSqlMigrator/CommandExecution/BaseSqlDropTriggerService.cpp \
     LocalSchemeMigrator/CommandExecution/LocalSchemeCreateTriggerService.cpp \
-    LocalSchemeMigrator/CommandExecution/LocalSchemeDropTriggerService.cpp
+    LocalSchemeMigrator/CommandExecution/LocalSchemeDropTriggerService.cpp \
+    Structure/Procedure.cpp \
+    Commands/CreateProcedure.cpp \
+    Commands/DropProcedure.cpp \
+    BaseSqlMigrator/CommandExecution/BaseSqlCreateProcedureService.cpp \
+    BaseSqlMigrator/CommandExecution/BaseSqlDropProcedureService.cpp \
+    LocalSchemeMigrator/CommandExecution/LocalSchemeCreateProcedureService.cpp \
+    LocalSchemeMigrator/CommandExecution/LocalSchemeDropProcedureService.cpp
 
 INSTALL_HEADERS += \
     api.h \
@@ -148,6 +155,13 @@ HEADERS += \
     BaseSqlMigrator/CommandExecution/BaseSqlCreateTriggerService.h \
     BaseSqlMigrator/CommandExecution/BaseSqlDropTriggerService.h \
     LocalSchemeMigrator/CommandExecution/LocalSchemeCreateTriggerService.h \
-    LocalSchemeMigrator/CommandExecution/LocalSchemeDropTriggerService.h
+    LocalSchemeMigrator/CommandExecution/LocalSchemeDropTriggerService.h \
+    Structure/Procedure.h \
+    Commands/CreateProcedure.h \
+    Commands/DropProcedure.h \
+    BaseSqlMigrator/CommandExecution/BaseSqlCreateProcedureService.h \
+    BaseSqlMigrator/CommandExecution/BaseSqlDropProcedureService.h \
+    LocalSchemeMigrator/CommandExecution/LocalSchemeCreateProcedureService.h \
+    LocalSchemeMigrator/CommandExecution/LocalSchemeDropProcedureService.h
 
 include(../build/qmake/_lib.pri)

@@ -3,6 +3,7 @@
 
 #include "config.h"
 #include "Structure/Trigger.h"
+#include "Structure/Procedure.h"
 
 #include <QString>
 #include <QSqlDatabase>
@@ -38,6 +39,15 @@ public:
         // since it implemented only for MySQL, return empty Trigger
         // TODO implement Trigger in other databases
         return Structure::Trigger(triggerName, QString(), Structure::Trigger::After, Structure::Trigger::Insert, QString());
+    }
+
+    //! \return the definition of an existing procedure in the database
+    virtual Structure::Procedure getProcedureDefinition(const QString &procedureName,
+                                                QSqlDatabase database) const {
+        Q_UNUSED(database)
+        // since it implemented only for MySQL, return empty Procedure
+        // TODO implement Procedure in other databases
+        return Structure::Procedure(procedureName, QString());
     }
 };
 

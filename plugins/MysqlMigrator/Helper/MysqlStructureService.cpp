@@ -32,6 +32,7 @@
 #include "Structure/Table.h"
 #include "Structure/Index.h"
 #include "Structure/Trigger.h"
+#include "Structure/Procedure.h"
 
 #include <QDebug>
 #include <QSqlError>
@@ -141,6 +142,38 @@ Trigger MysqlStructureService::getTriggerDefinition(const QString &triggerName, 
         }
     } while (false);
     return Structure::Trigger(triggerName, table, timing, event, body);
+}
+
+Procedure MysqlStructureService::getProcedureDefinition(const QString &procedureName, QSqlDatabase database) const
+{
+    Procedure::Security security = Procedure::Definer;
+    QString body, parameters;
+    do {
+        QString queryString = QString("SHOW CREATE PROCEDURE %1").arg(procedureName);
+        QSqlQuery query = database.exec(queryString);
+        QSqlError error = query.lastError();
+        if (error.isValid()) {
+            ::qDebug() << Q_FUNC_INFO << error.text();
+            break;
+        }
+        if (query.next()) {
+            QStringList procLines = query.value(2).toString().split("\n");
+
+            QRegExp reParams("\\((.*)\\)");
+            if (-1 != reParams.indexIn(procLines.value(0))) parameters = reParams.cap(1);
+            if (!procLines.isEmpty()) procLines.removeFirst();
+
+            while (procLines.value(0).startsWith("    ")) {
+                if (procLines.value(0).endsWith("INVOKER")) {
+                    security = Procedure::Invoker;
+                }
+                procLines.removeFirst();
+            }
+
+            body = procLines.join("\n");
+        }
+    } while (false);
+    return Structure::Procedure(procedureName, body, parameters, security);
 }
 
 } // namespace Helper

@@ -36,6 +36,8 @@
 namespace Structure {
 class Table;
 class Index;
+class Trigger;
+class Procedure;
 }
 
 namespace CommandExecution {
@@ -58,6 +60,9 @@ public:
                                         QSqlDatabase database) const Q_DECL_OVERRIDE;
 
     Structure::Trigger getTriggerDefinition(const QString &triggerName,
+                                          QSqlDatabase database) const Q_DECL_OVERRIDE;
+
+    Structure::Procedure getProcedureDefinition(const QString &procedureName,
                                           QSqlDatabase database) const Q_DECL_OVERRIDE;
 };
 

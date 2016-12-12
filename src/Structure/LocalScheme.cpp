@@ -58,6 +58,24 @@ LocalScheme::Trigger &LocalScheme::Trigger::operator =(const LocalScheme::Trigge
     return *this;
 }
 
+// Procedure
+LocalScheme::Procedure::Procedure(const LocalScheme::Procedure &other)
+    : Structure::Procedure( other.name(), other.body(), other.parameters(), other.security() )
+{
+}
+
+LocalScheme::Procedure::Procedure(const Structure::Procedure &other)
+    : Structure::Procedure( other.name(), other.body(), other.parameters(), other.security() )
+{
+}
+
+LocalScheme::Procedure &LocalScheme::Procedure::operator =(const LocalScheme::Procedure &other)
+{
+    this->~Procedure();
+    new(this) Procedure(other);
+    return *this;
+}
+
 // LocalScheme
 LocalScheme::LocalScheme()
 {
@@ -76,6 +94,11 @@ LocalScheme::IndexMap &LocalScheme::indices()
 LocalScheme::TriggerMap &LocalScheme::triggers()
 {
     return m_triggers;
+}
+
+LocalScheme::ProcedureMap &LocalScheme::procedures()
+{
+    return m_procedures;
 }
 
 const Structure::Table *LocalScheme::table(const QString &name) const
@@ -98,6 +121,14 @@ const Structure::Trigger *LocalScheme::trigger(const QString &name) const
 {
     auto it = m_triggers.find(name);
     if (it == m_triggers.end())
+        return nullptr;
+    return &it.value();
+}
+
+const Structure::Procedure *LocalScheme::procedure(const QString &name) const
+{
+    auto it = m_procedures.find(name);
+    if (it == m_procedures.end())
         return nullptr;
     return &it.value();
 }
@@ -168,6 +199,23 @@ void LocalScheme::dropTrigger(const QString &triggerName)
     int removed = m_triggers.remove( triggerName );
     if (0 == removed) {
         ::qWarning() << "Dropped trigger does not exist" << triggerName;
+    }
+}
+
+void LocalScheme::createProcedure(const Structure::Procedure &procedure)
+{
+    if (m_procedures.contains(procedure.name())) {
+        ::qWarning() << "Created procedure already existed" << procedure.name();
+        return;
+    }
+    m_procedures.insert( procedure.name(), procedure );
+}
+
+void LocalScheme::dropProcedure(const QString &procedureName)
+{
+    int removed = m_procedures.remove( procedureName );
+    if (0 == removed) {
+        ::qWarning() << "Dropped procedure does not exist" << procedureName;
     }
 }
 

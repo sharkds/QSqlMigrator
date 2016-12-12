@@ -8,6 +8,7 @@
 
 #include "Structure/Table.h"
 #include "Structure/Trigger.h"
+#include "Structure/Procedure.h"
 
 #include <QDebug>
 #include <QStringList>
@@ -96,6 +97,21 @@ bool LocalSchemeComparisonService::compareLocalSchemeWithDatabase(const LocalSch
         }
         if (trigger.body().simplified() != realTrigger.body().simplified()) {
             qWarning() << LOG_PREFIX << "trigger" << trigger.name() << "has body set to" << trigger.body() << ", while real trigger has it set to"  << realTrigger.body();
+            success = false;
+        }
+    }
+    foreach (const Structure::Procedure &procedure, context.localScheme()->procedures()) {
+        Structure::Procedure realProcedure = context.helperRepository().sqlStructureService().getProcedureDefinition(procedure.name(), context.database());
+        if (procedure.parameters().simplified() != realProcedure.parameters().simplified()) {
+            qWarning() << LOG_PREFIX << "procedure" << procedure.name() << "has parameters set to" << procedure.parameters() << ", while real procedure has it set to"  << realProcedure.parameters();
+            success = false;
+        }
+        if (procedure.security() != realProcedure.security()) {
+            qWarning() << LOG_PREFIX << "procedure" << procedure.name() << "has security set to" << procedure.securityName() << ", while real procedure has it set to"  << realProcedure.securityName();
+            success = false;
+        }
+        if (procedure.body().simplified() != realProcedure.body().simplified()) {
+            qWarning() << LOG_PREFIX << "procedure" << procedure.name() << "has body set to" << procedure.body() << ", while real procedure has it set to"  << realProcedure.body();
             success = false;
         }
     }
