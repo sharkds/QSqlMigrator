@@ -40,6 +40,24 @@ LocalScheme::Index &LocalScheme::Index::operator =(const LocalScheme::Index &oth
     return *this;
 }
 
+// Trigger
+LocalScheme::Trigger::Trigger(const LocalScheme::Trigger &other)
+    : Structure::Trigger( other.name(), other.tableName(), other.timing(), other.event(), other.body() )
+{
+}
+
+LocalScheme::Trigger::Trigger(const Structure::Trigger &other)
+    : Structure::Trigger( other.name(), other.tableName(), other.timing(), other.event(), other.body() )
+{
+}
+
+LocalScheme::Trigger &LocalScheme::Trigger::operator =(const LocalScheme::Trigger &other)
+{
+    this->~Trigger();
+    new(this) Trigger(other);
+    return *this;
+}
+
 // LocalScheme
 LocalScheme::LocalScheme()
 {
@@ -55,6 +73,11 @@ LocalScheme::IndexMap &LocalScheme::indices()
     return m_indices;
 }
 
+LocalScheme::TriggerMap &LocalScheme::triggers()
+{
+    return m_triggers;
+}
+
 const Structure::Table *LocalScheme::table(const QString &name) const
 {
     auto it = m_tables.find(name);
@@ -67,6 +90,14 @@ const Structure::Index *LocalScheme::index(const QString &name) const
 {
     auto it = m_indices.find(name);
     if (it == m_indices.end())
+        return nullptr;
+    return &it.value();
+}
+
+const Structure::Trigger *LocalScheme::trigger(const QString &name) const
+{
+    auto it = m_triggers.find(name);
+    if (it == m_triggers.end())
         return nullptr;
     return &it.value();
 }
@@ -120,6 +151,23 @@ void LocalScheme::dropIndex(const QString &indexName)
     int removed = m_indices.remove( indexName );
     if (0 == removed) {
         ::qWarning() << "Dropped index does not exist" << indexName;
+    }
+}
+
+void LocalScheme::createTrigger(const Structure::Trigger &trigger)
+{
+    if (m_triggers.contains(trigger.name())) {
+        ::qWarning() << "Created trigger already existed" << trigger.name();
+        return;
+    }
+    m_triggers.insert( trigger.name(), trigger );
+}
+
+void LocalScheme::dropTrigger(const QString &triggerName)
+{
+    int removed = m_triggers.remove( triggerName );
+    if (0 == removed) {
+        ::qWarning() << "Dropped trigger does not exist" << triggerName;
     }
 }
 

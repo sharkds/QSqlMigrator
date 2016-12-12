@@ -7,6 +7,7 @@
 #include "Helper/TypeMapperService.h"
 
 #include "Structure/Table.h"
+#include "Structure/Trigger.h"
 
 #include <QDebug>
 #include <QStringList>
@@ -76,6 +77,25 @@ bool LocalSchemeComparisonService::compareLocalSchemeWithDatabase(const LocalSch
             qWarning() << LOG_PREFIX << "table" << index.tableName() << "index" << index.name() << "have different columns";
             qWarning() << LOG_PREFIX << "table" << index.tableName() << "local scheme index:" << context.helperRepository().columnService().generateIndexColumnsDefinitionSql(index.columns());
             qWarning() << LOG_PREFIX << "table" << index.tableName() << "real index:" << context.helperRepository().columnService().generateIndexColumnsDefinitionSql(realIndex.columns());
+            success = false;
+        }
+    }
+    foreach (const Structure::Trigger &trigger, context.localScheme()->triggers()) {
+        Structure::Trigger realTrigger = context.helperRepository().sqlStructureService().getTriggerDefinition(trigger.name(), context.database());
+        if (trigger.tableName() != realTrigger.tableName()) {
+            qWarning() << LOG_PREFIX << "trigger" << trigger.name() << "has table set to" << trigger.tableName() << ", while real trigger has it set to"  << realTrigger.tableName();
+            success = false;
+        }
+        if (trigger.timing() != realTrigger.timing()) {
+            qWarning() << LOG_PREFIX << "trigger" << trigger.name() << "has timing set to" << trigger.timingName() << ", while real trigger has it set to"  << realTrigger.timingName();
+            success = false;
+        }
+        if (trigger.event() != realTrigger.event()) {
+            qWarning() << LOG_PREFIX << "trigger" << trigger.name() << "has event set to" << trigger.eventName() << ", while real trigger has it set to"  << realTrigger.eventName();
+            success = false;
+        }
+        if (trigger.body().simplified() != realTrigger.body().simplified()) {
+            qWarning() << LOG_PREFIX << "trigger" << trigger.name() << "has body set to" << trigger.body() << ", while real trigger has it set to"  << realTrigger.body();
             success = false;
         }
     }

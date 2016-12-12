@@ -31,6 +31,7 @@
 
 #include "Structure/Table.h"
 #include "Structure/Index.h"
+#include "Structure/Trigger.h"
 
 #include <QDebug>
 #include <QSqlError>
@@ -59,7 +60,7 @@ Table MysqlStructureService::getTableDefinition(const QString &tableName, QSqlDa
         while (query.next()) {
             QString name = query.value(0).toString();
             QString type = query.value(1).toString();
-            bool null = query.value(2).toBool();
+            bool null = (query.value(2).toString() == "YES") ? true : false;
             QString key = query.value(3).toString();
             QString defaultValue = query.value(4).toString();
             QString extra = query.value(5).toString();
@@ -106,6 +107,40 @@ Index MysqlStructureService::getIndexDefinition(const QString &indexName,
         }
     } while (false);
     return Structure::Index(indexName, tableName, columns);
+}
+
+Trigger MysqlStructureService::getTriggerDefinition(const QString &triggerName, QSqlDatabase database) const
+{
+    QString table;
+    Trigger::Timing timing = Trigger::After;
+    Trigger::Event event = Trigger::Insert;
+    QString body;
+    do {
+        QString queryString = QString("SHOW TRIGGERS WHERE `Trigger` = \"%1\"").arg(triggerName);
+        QSqlQuery query = database.exec(queryString);
+        QSqlError error = query.lastError();
+        if (error.isValid()) {
+            ::qDebug() << Q_FUNC_INFO << error.text();
+            break;
+        }
+        if (query.next()) {
+            if (query.value(1).toString() == "INSERT") {
+                event = Trigger::Insert;
+            } else if (query.value(1).toString() == "DELETE") {
+                event = Trigger::Delete;
+            } else if (query.value(1).toString() == "UPDATE") {
+                event = Trigger::Update;
+            }
+            table = query.value(2).toString();
+            body = query.value(3).toString();
+            if (query.value(4).toString() == "AFTER") {
+                timing = Trigger::After;
+            } else if (query.value(4).toString() == "BEFORE") {
+                timing = Trigger::Before;
+            }
+        }
+    } while (false);
+    return Structure::Trigger(triggerName, table, timing, event, body);
 }
 
 } // namespace Helper

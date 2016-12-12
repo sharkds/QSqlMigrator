@@ -28,7 +28,9 @@ SOURCES += \
      Helper/MysqlColumnService.cpp \
      Helper/MysqlTypeMapperService.cpp \
      CommandExecution/MysqlAlterColumnTypeService.cpp \
-     CommandExecution/MysqlRenameColumnService.cpp
+     CommandExecution/MysqlRenameColumnService.cpp \
+     CommandExecution/MysqlCreateTriggerService.cpp \
+     CommandExecution/MysqlDropTriggerService.cpp
 
 INSTALL_HEADERS += \
      MysqlMigrator.h
@@ -38,6 +40,8 @@ HEADERS += \
      Helper/MysqlColumnService.h \
      Helper/MysqlTypeMapperService.h \
      CommandExecution/MysqlAlterColumnTypeService.h \
-     CommandExecution/MysqlRenameColumnService.h
+     CommandExecution/MysqlRenameColumnService.h \
+     CommandExecution/MysqlCreateTriggerService.h \
+     CommandExecution/MysqlDropTriggerService.h
 
 include(../../build/qmake/_plugin.pri)

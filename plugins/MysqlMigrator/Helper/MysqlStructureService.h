@@ -56,6 +56,9 @@ public:
     Structure::Index getIndexDefinition(const QString &indexName,
                                         const QString &tableName,
                                         QSqlDatabase database) const Q_DECL_OVERRIDE;
+
+    Structure::Trigger getTriggerDefinition(const QString &triggerName,
+                                          QSqlDatabase database) const Q_DECL_OVERRIDE;
 };
 
 } // namespace Helper

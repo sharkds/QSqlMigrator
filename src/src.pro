@@ -62,7 +62,14 @@ SOURCES += \
     LocalSchemeMigrator/LocalSchemeComparisonContext.cpp \
     Helper/HelperRepository.cpp \
     BaseSqlMigrator/MigrationTracker/BaseMigrationTableService.cpp \
-    Structure/Type.cpp
+    Structure/Type.cpp \
+    Structure/Trigger.cpp \
+    Commands/CreateTrigger.cpp \
+    Commands/DropTrigger.cpp \
+    BaseSqlMigrator/CommandExecution/BaseSqlCreateTriggerService.cpp \
+    BaseSqlMigrator/CommandExecution/BaseSqlDropTriggerService.cpp \
+    LocalSchemeMigrator/CommandExecution/LocalSchemeCreateTriggerService.cpp \
+    LocalSchemeMigrator/CommandExecution/LocalSchemeDropTriggerService.cpp
 
 INSTALL_HEADERS += \
     api.h \
@@ -135,5 +142,12 @@ HEADERS += \
     LocalSchemeMigrator/CommandExecution/LocalSchemeRenameTableService.h \
     LocalSchemeMigrator/LocalSchemeComparisonService.h \
     LocalSchemeMigrator/LocalSchemeComparisonContext.h \
+    Structure/Trigger.h \
+    Commands/CreateTrigger.h \
+    Commands/DropTrigger.h \
+    BaseSqlMigrator/CommandExecution/BaseSqlCreateTriggerService.h \
+    BaseSqlMigrator/CommandExecution/BaseSqlDropTriggerService.h \
+    LocalSchemeMigrator/CommandExecution/LocalSchemeCreateTriggerService.h \
+    LocalSchemeMigrator/CommandExecution/LocalSchemeDropTriggerService.h
 
 include(../build/qmake/_lib.pri)

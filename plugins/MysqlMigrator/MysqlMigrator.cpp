@@ -35,6 +35,8 @@
 
 #include "MysqlMigrator/CommandExecution/MysqlAlterColumnTypeService.h"
 #include "MysqlMigrator/CommandExecution/MysqlRenameColumnService.h"
+#include "MysqlMigrator/CommandExecution/MysqlCreateTriggerService.h"
+#include "MysqlMigrator/CommandExecution/MysqlDropTriggerService.h"
 
 #include "Helper/HelperRepository.h"
 
@@ -62,9 +64,11 @@ QSharedPointer<CommandExecution::CommandExecutionServiceRepository> createComman
     commandRepository->add(BaseCommandServicePtr(new MysqlAlterColumnTypeService));
     commandRepository->add(BaseCommandServicePtr(new BaseSqlCreateIndexService));
     commandRepository->add(BaseCommandServicePtr(new BaseSqlCreateTableService));
+    commandRepository->add(BaseCommandServicePtr(new MysqlCreateTriggerService));
     commandRepository->add(BaseCommandServicePtr(new BaseSqlDropColumnService));
     commandRepository->add(BaseCommandServicePtr(new BaseSqlDropIndexService));
     commandRepository->add(BaseCommandServicePtr(new BaseSqlDropTableService));
+    commandRepository->add(BaseCommandServicePtr(new MysqlDropTriggerService));
     commandRepository->add(BaseCommandServicePtr(new MysqlRenameColumnService));
     commandRepository->add(BaseCommandServicePtr(new BaseSqlRenameTableService));
     commandRepository->add(BaseCommandServicePtr(new CustomCommandService));
