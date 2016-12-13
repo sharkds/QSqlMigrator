@@ -59,6 +59,7 @@ public:
         const QString &name() const;
         const SortOrder &sortOrder() const;
 
+        Column& operator=(const Column& other);
         bool operator==(const Column& other) const;
 
     private:
@@ -113,6 +114,14 @@ inline const QString &Index::Column::name() const
 inline const Index::SortOrder &Index::Column::sortOrder() const
 {
     return m_sortOrder;
+}
+
+inline Index::Column &Index::Column::operator=(const Index::Column &other)
+{
+    if (&other == this) return *this;
+    this->~Column();
+    new(this) Column(other.name(), other.sortOrder());
+    return *this;
 }
 
 inline bool Index::Column::operator==(const Index::Column &other) const

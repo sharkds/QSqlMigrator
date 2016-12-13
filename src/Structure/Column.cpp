@@ -50,6 +50,14 @@ Column::Column(const QString &name, const Type &type, Attributes attributes)
     }
 }
 
+Column &Column::operator=(const Column &other)
+{
+    if (&other == this) return *this;
+    this->~Column();
+    new(this) Column(other.name(), other.type(), other.defaultValue(), other.attributes());
+    return *this;
+}
+
 const QString &Column::name() const
 {
     return m_name;

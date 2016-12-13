@@ -59,6 +59,8 @@ public:
     explicit Column(const QString &name, const Type &type, const QString& defaultValue, Attributes attributes = None);
     explicit Column(const QString &name, const Type &type, Attributes attributes = None);
 
+    Column& operator=(const Column& other);
+
     const QString &name() const;
     const Type &type() const;
     const QString &defaultValue() const;
